@@ -41,6 +41,7 @@ namespace :style do
     FoodCritic::Rake::LintTask.new(:foodcritic) do |task|
       task.options = {
         fail_tags: ['any'],
+        tags: %w(~FC078 ~FC064 ~FC065),
         progress: true,
       }
     end
@@ -99,7 +100,6 @@ namespace :release do
   begin
     require 'stove/rake_task'
     Stove::RakeTask.new
-
   rescue
     puts ">>> Gem load error: #{e}, omitting operational:tag" unless ENV['CI']
   end
