@@ -59,7 +59,7 @@ namespace :test do
     desc 'Run ChefSpec unit tests'
     RSpec::Core::RakeTask.new(:unit) do |t|
       t.rspec_opts = ENV['CI'] ? '--format RspecJunitFormatter --out rspec.xml' : '--color --format progress'
-      t.pattern = 'test/unit/**{,/*/**}/*_spec.rb'
+      t.pattern = 'spec/unit/**{,/*/**}/*_spec.rb'
     end
   rescue
     puts ">>> Gem load error: #{e}, omitting tests:unit" unless ENV['CI']
