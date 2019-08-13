@@ -12,7 +12,16 @@ unless os.windows?
   end
 end
 
-# This is an example test, replace it with your own test.
-describe port(80) do
-  it { should be_listening }
+if os.redhat?
+  describe service('httpd') do
+    it { should be_installed }
+    it { should be_enabled }
+    it { should be_running }
+  end
+elsif os.debian?
+  describe service('apache2') do
+    it { should be_installed }
+    it { should be_enabled }
+    it { should be_running }
+  end
 end
