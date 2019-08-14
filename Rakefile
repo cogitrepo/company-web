@@ -11,8 +11,8 @@ task :clean do
     metadata.json
     vendor
     policies/*.lock.json
-    commit.txt
     rspec.xml
+    checkstyle-result.xml
   ).each { |f| FileUtils.rm_rf(Dir.glob(f)) }
 end
 desc 'Run foodcritic and cookstyle on this cookbook'
@@ -81,9 +81,8 @@ namespace :test do
     desc 'Destroys all active kitchen resources'
     task :destroy do
       sh 'kitchen destroy'
-    end  
+    end
   end
-
 
   task all: ['test:berks_install', 'test:unit', 'test:kitchen:all']
 end
