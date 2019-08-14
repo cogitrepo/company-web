@@ -2,7 +2,7 @@
 // COOKBOOK BUILD SETTINGS
 
 // name of this cookbook
-def cookbook = 'cafe'
+def cookbook = 'company-web'
 
 // SUPERMARKET SETTINGS
 // the branch that should be promoted to supermarket
