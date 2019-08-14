@@ -62,16 +62,18 @@ stage('Lint') {
       }
 
      dir(cookbookDirectory) {
+        def checkstyle = scanForIssues tool: checkStyle(pattern: '**/reports/xml/checkstyle-result.xml')
         try {
           rake('style')
         }
         finally {
-          step([$class: 'CheckStylePublisher',
-                canComputeNew: false,
-                defaultEncoding: '',
-                healthy: '',
-                pattern: '**/reports/xml/checkstyle-result.xml',
-                unHealthy: ''])
+          // step([$class: 'CheckStylePublisher',
+          //      canComputeNew: false,
+          //      defaultEncoding: '',
+          //      healthy: '',
+          //      pattern: '**/reports/xml/checkstyle-result.xml',
+          //      unHealthy: ''])
+          publishIssues issues: [checkstyle]
         }
       }
       currentBuild.result = 'SUCCESS'
