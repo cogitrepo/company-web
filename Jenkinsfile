@@ -72,7 +72,7 @@ stage('Lint') {
           //      healthy: '',
           //      pattern: '**/reports/xml/checkstyle-result.xml',
           //      unHealthy: ''])
-          def checkstyle = scanForIssues tool: checkStyle(pattern: '**/reports/xml/checkstyle-result.xml')
+          def checkstyle = scanForIssues tool: checkStyle(pattern: '**/checkstyle-result.xml')
           publishIssues issues: [checkstyle]
         }
       }

@@ -28,7 +28,7 @@ namespace :style do
       task.options.concat %w(
         --require rubocop/formatter/checkstyle_formatter
         --format RuboCop::Formatter::CheckstyleFormatter
-        -o reports/xml/checkstyle-result.xml
+        -o checkstyle-result.xml
       ) if ENV['CI']
     end
   rescue
@@ -65,6 +65,10 @@ namespace :test do
     puts ">>> Gem load error: #{e}, omitting tests:unit" unless ENV['CI']
   end
 
+  task :berks_install do
+    sh 'berks install'
+  end
+
   begin
     require 'kitchen/rake_tasks'
     desc 'Run kitchen integration tests'
@@ -72,14 +76,16 @@ namespace :test do
   rescue StandardError => e
     puts ">>> Kitchen error: #{e}, omitting #{task.name}" unless ENV['CI']
   end
+
   namespace :kitchen do
     desc 'Destroys all active kitchen resources'
     task :destroy do
       sh 'kitchen destroy'
-    end
+    end  
   end
 
-  task all: ['test:unit', 'test:kitchen:all']
+
+  task all: ['test:berks_install', 'test:unit', 'test:kitchen:all']
 end
 
 desc 'bumps the patch version and releases the cookbook to the supermarket'
