@@ -62,7 +62,6 @@ stage('Lint') {
       }
 
      dir(cookbookDirectory) {
-        def checkstyle = scanForIssues tool: checkStyle(pattern: '**/reports/xml/checkstyle-result.xml')
         try {
           rake('style')
         }
@@ -73,6 +72,7 @@ stage('Lint') {
           //      healthy: '',
           //      pattern: '**/reports/xml/checkstyle-result.xml',
           //      unHealthy: ''])
+          def checkstyle = scanForIssues tool: checkStyle(pattern: '**/reports/xml/checkstyle-result.xml')
           publishIssues issues: [checkstyle]
         }
       }
