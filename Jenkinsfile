@@ -50,7 +50,7 @@ def fetch(scm, cookbookDirectory, currentBranch){
 stage('Lint') {
   node {
     notify_stash(building_pull_request)
-
+  node {
     echo "cookbook: ${cookbook}"
     echo "current branch: ${currentBranch}"
     echo "checkout directory: ${cookbookDirectory}"
