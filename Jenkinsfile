@@ -48,6 +48,7 @@ def fetch(scm, cookbookDirectory, currentBranch){
 }
 
 stage('Lint') {
+  node {
     notify_stash(building_pull_request)
 
     echo "cookbook: ${cookbook}"
@@ -80,9 +81,11 @@ stage('Lint') {
       notify_stash(building_pull_request)
       throw err
     }
+  }
 }
 
 stage('Unit Test'){
+  node {
     try {
       fetch(scm, cookbookDirectory, currentBranch)
       dir(cookbookDirectory) {
@@ -99,9 +102,11 @@ stage('Unit Test'){
     finally {
       junit allowEmptyResults: true, testResults: '**/rspec.xml'
     }
+  }
 }
 
 stage('Functional (Kitchen)') {
+node {
     try{
       fetch(scm, cookbookDirectory, currentBranch)
       dir(cookbookDirectory) {
@@ -118,16 +123,19 @@ stage('Functional (Kitchen)') {
         rake('test:kitchen:destroy')
       }
     }
+  }
 }
 
 if (currentBranch == stableBranch){
   lock(cookbook){
     stage ('Promote to Supermarket') {
+      node {
         fetch(scm, cookbookDirectory, currentBranch)
         dir(cookbookDirectory) {
           execute "git branch --set-upstream ${currentBranch} origin/${currentBranch}"
           rake('release')
         }
+      }
     }
   }
 }
