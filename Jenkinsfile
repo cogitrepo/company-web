@@ -1,8 +1,6 @@
 #!/usr/bin/env groovy
 // COOKBOOK BUILD SETTINGS
 
-def ENV['CI'] = 'true'
-
 // name of this cookbook
 def cookbook = 'company-web'
 
