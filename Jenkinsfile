@@ -48,7 +48,7 @@ def fetch(scm, cookbookDirectory, currentBranch){
 }
 
 stage('Lint') {
-  node {
+  node ("chef") {
     notify_stash(building_pull_request)
 
     echo "cookbook: ${cookbook}"
@@ -66,12 +66,6 @@ stage('Lint') {
           rake('style')
         }
         finally {
-          // step([$class: 'CheckStylePublisher',
-          //      canComputeNew: false,
-          //      defaultEncoding: '',
-          //      healthy: '',
-          //      pattern: '**/reports/xml/checkstyle-result.xml',
-          //      unHealthy: ''])
           def checkstyle = scanForIssues tool: checkStyle(pattern: '**/checkstyle-result.xml')
           publishIssues issues: [checkstyle]
         }
@@ -87,7 +81,7 @@ stage('Lint') {
 }
 
 stage('Unit Test'){
-  node {
+  node ("chef") {
     try {
       fetch(scm, cookbookDirectory, currentBranch)
       dir(cookbookDirectory) {
@@ -108,7 +102,7 @@ stage('Unit Test'){
 }
 
 stage('Functional (Kitchen)') {
-node {
+node ("chef") {
     try{
       fetch(scm, cookbookDirectory, currentBranch)
       dir(cookbookDirectory) {
@@ -131,7 +125,7 @@ node {
 if (currentBranch == stableBranch){
   lock(cookbook){
     stage ('Promote to Supermarket') {
-      node {
+      node ("chef") {
         fetch(scm, cookbookDirectory, currentBranch)
         dir(cookbookDirectory) {
           execute "git branch --set-upstream ${currentBranch} origin/${currentBranch}"
