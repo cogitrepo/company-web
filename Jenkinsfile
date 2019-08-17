@@ -2,11 +2,11 @@
 // COOKBOOK BUILD SETTINGS
 
 // name of this cookbook
-def cookbook = 'company-web'
+def cookbook = env.COOKBOOK_NAME //'company-web'
 
 // SUPERMARKET SETTINGS
 // the branch that should be promoted to supermarket
-def stableBranch = 'master'
+def stableBranch = env.STABLE_BRANCH//'master'
 // the current branch that is being built
 def currentBranch = env.BRANCH_NAME
 
