@@ -47,6 +47,18 @@ def fetch(scm, cookbookDirectory, currentBranch){
   ])
 }
 
+def manualPromotion() {
+  stage 'Manual Promotion'
+    // we need a first milestone step so that all jobs entering this stage are tracked and can be aborted if needed
+    milestone 1
+    // time out manual approval after ten minutes
+    // timeout(time: 10, unit: 'MINUTES') {
+        input message: "Does Pre-Production look good?"
+    //}
+    // this will kill any job which is still in the input step
+    milestone 2
+}
+
 stage('Lint') {
   node ("chef") {
     notify_stash(building_pull_request)
@@ -103,6 +115,7 @@ stage('Unit Test'){
 
 stage('Functional (Kitchen)') {
 node ("chef") {
+    manualPromotion()
     try{
       fetch(scm, cookbookDirectory, currentBranch)
       dir(cookbookDirectory) {
@@ -126,6 +139,7 @@ if (currentBranch == stableBranch){
   lock(cookbook){
     stage ('Promote to Supermarket') {
       node ("chef") {
+        manualPromotion()
         fetch(scm, cookbookDirectory, currentBranch)
         dir(cookbookDirectory) {
           execute "git branch --set-upstream ${currentBranch} origin/${currentBranch}"
