@@ -96,7 +96,7 @@ namespace :release do
     desc 'tags and pushes a patch change'
     task tag: ['release:bump:patch'] do
       sh 'git pull'
-      sh 'git push'
+      # sh 'git push'
     end
   rescue
     puts ">>> Gem load error: #{e}, omitting release:bump*" unless ENV['CI']
