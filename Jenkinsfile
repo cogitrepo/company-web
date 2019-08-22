@@ -47,17 +47,54 @@ def fetch(scm, cookbookDirectory, currentBranch){
   ])
 }
 
-def manualPromotion(buildURL) {
+def manualPromotion(buildURL, String buildStatus = 'STARTED') {
+//   buildStatus =  buildStatus ?: 'SUCCESSFUL'
+//   def colorName = 'RED'
+//   def colorCode = '#FF0000'
+//   def subject = "${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
+//   def summary = "${subject} (${env.BUILD_URL})"
+//   def details = """
+
+// STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':
+
+    
+
+// Check console output at "${env.JOB_NAME} [${env.BUILD_NUMBER}]"
+// """
+//   // Override default values based on build status
+//   if (buildStatus == 'STARTED') {
+//     color = 'YELLOW'
+//     colorCode = '#FFFF00'
+//   } else if (buildStatus == 'SUCCESSFUL') {
+//     color = 'GREEN'
+//     colorCode = '#00FF00'
+//   } else {
+//     color = 'RED'
+//     colorCode = '#FF0000'
+//   }
+
+//   // Send notifications
+//   emailext (
+//       subject: subject,
+//       body: details,
+//       recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+//     )
+// }
   stage 'Manual Promotion'
     // we need a first milestone step so that all jobs entering this stage are tracked and can be aborted if needed
     // milestone 1
     // time out manual approval after ten minutes
     // timeout(time: 10, unit: 'MINUTES') {
-        input message: "Does Pre-Production look good? [" + buildURL + "]"
+//   emailext (
+//       subject: "Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+//       body: buildURL,
+//       recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+//     )
+    input message: "Does Pre-Production look good? [" + buildURL + "]"
     //}
     // this will kill any job which is still in the input step
     // milestone 2
-}
+}\
 
 stage('Lint') {
   node ("chef") {
