@@ -87,7 +87,7 @@ namespace :test do
   task all: ['test:berks_install', 'test:unit', 'test:kitchen:all']
 end
 
-desc 'bumps the patch version and releases the cookbook to the supermarket'
+desc 'bumps the patch version and uploads the cookbook to the chef server'
 task release: 'release:all'
 namespace :release do
   begin
@@ -102,12 +102,16 @@ namespace :release do
     puts ">>> Gem load error: #{e}, omitting release:bump*" unless ENV['CI']
   end
 
-  begin
-    require 'stove/rake_task'
-    Stove::RakeTask.new
-  rescue
-    puts ">>> Gem load error: #{e}, omitting operational:tag" unless ENV['CI']
+  # begin
+  #   require 'stove/rake_task'
+  #   Stove::RakeTask.new
+  # rescue
+  #   puts ">>> Gem load error: #{e}, omitting operational:tag" unless ENV['CI']
+  # end
+
+  task :cbupload do
+    'sh knife cookbook -a'
   end
 
-  task all: ['release:tag', 'release:publish']
+  task all: ['release:tag', 'release:cbupload']
 end
