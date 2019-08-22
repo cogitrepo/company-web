@@ -113,9 +113,12 @@ stage('Unit Test'){
   }
 }
 
+stage('Promotion') {
+  manualPromotion()
+}
+
 stage('Functional (Kitchen)') {
-node ("chef") {
-    manualPromotion()
+  node ("chef") {
     try{
       fetch(scm, cookbookDirectory, currentBranch)
       dir(cookbookDirectory) {
@@ -139,7 +142,6 @@ if (currentBranch == stableBranch){
   lock(cookbook){
     stage ('Promote to Supermarket') {
       node ("chef") {
-        manualPromotion()
         fetch(scm, cookbookDirectory, currentBranch)
         dir(cookbookDirectory) {
           execute "git branch --set-upstream ${currentBranch} origin/${currentBranch}"
